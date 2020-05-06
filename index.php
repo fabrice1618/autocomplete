@@ -36,12 +36,13 @@ $aResult = array();
 
 $sSearch = $_POST['loc-input'] ?? "";
 if (!empty($sSearch)) {
-    $sSearch = htmlentities($sSearch);
+    $sSearch = $sSearch;
+//    $sSearch = htmlentities($sSearch);
 
-    $nPos1 = strpos($sSearch, '(');
-    $nPos2 = strpos($sSearch, ')');
+    $nPos1 = strpos($sSearch, '(' );
+    $nPos2 = strpos($sSearch, ')' );
 
-    $sCommune = substr($sSearch, 0, $nPos1);
+    $sCommune = substr($sSearch, 0, $nPos1-1);
     $sCp = substr($sSearch, $nPos1+1, $nPos2-$nPos1-1);
 
     $aResult = $commune->read($sCp, $sCommune);

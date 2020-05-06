@@ -19,7 +19,7 @@ $aResult = array();
 
 $sSearch = $_GET['search'] ?? "";
 if (!empty($sSearch)) {
-    $sSearch = htmlentities($sSearch);
+//    $sSearch = htmlentities($sSearch);
 
     if (intval($sSearch)>0) {
         $aResult = $commune->cp_index($sSearch);
