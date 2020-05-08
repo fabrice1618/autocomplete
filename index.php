@@ -16,7 +16,7 @@
         </form>
 
 <?php
-require("autoload.php");
+require("lib/autoload.php");
 
 date_default_timezone_set('Europe/Paris');
 
