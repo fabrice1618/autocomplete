@@ -48,7 +48,9 @@ class ConvertUtil
                 $sConvert = self::convertChar($sChar);
                 if ($sConvert === false ) {
                     // Erreur pour caracteres inconnu
-                    throw new Exception(__CLASS__.": convertString not known '$sChar' (".mb_ord($sChar).") ");
+                    echo "Erreur inconnu " . $sChar . mb_ord($sChar). "\n";
+
+//                    throw new Exception(__CLASS__.": convertString not known '$sChar' (".mb_ord($sChar).") ");
 
                 } else {
                     $sOutString .= $sConvert;

@@ -27,6 +27,8 @@ if (!empty($sSearch)) {
     }
     else {
         // Sinon faire une recherche par nom de commune
+        $sSearch = ConvertUtil::convertString($sSearch);
+//        echo "Search=$sSearch";
         $aResult = $commune->commune_index($sSearch);
     }
 }

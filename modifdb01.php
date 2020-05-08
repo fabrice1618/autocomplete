@@ -13,13 +13,29 @@ try {
     die();
 }
 
-$sql = 'SELECT commune FROM commune';
+$sql = 'SELECT commune, cp FROM commune';
+$sql_update = 'UPDATE commune SET recherche=:recherche WHERE cp=:cp AND commune=:commune';
+
 try {
   $stmt = $dbh->prepare($sql, array(PDO::ATTR_CURSOR, PDO::CURSOR_SCROLL));
   $stmt->execute();
   while ($aRow = $stmt->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_NEXT)) {
+    // Conversion du nom de commune
     $sCommune = $aRow['commune'];
+    $sCp = $aRow['cp'];
+
     $sConvert = ConvertUtil::convertString($sCommune);
+    echo "$sCommune = $sConvert\n";
+
+    // Mise à jour de la base
+    $stmt2 = $dbh->prepare($sql_update);
+    $stmt2->bindValue(':recherche', $sConvert, PDO::PARAM_STR);
+    $stmt2->bindValue(':cp', $sCp, PDO::PARAM_STR);
+    $stmt2->bindValue(':commune', $sCommune, PDO::PARAM_STR);
+
+    $stmt2->execute();
+  
+
   }
   $stmt = null;
 }
