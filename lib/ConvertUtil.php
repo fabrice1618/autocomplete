@@ -2,6 +2,10 @@
 
 class ConvertUtil
 {
+    // Table de conversion
+    // Index = Code UTF-8
+    // Valeur = Caractere de remplacement
+    // En commentaire le caractere original
     const CONVERT_TABLE = [
         39 => ' ',      // '
         40 => ' ',      // (
@@ -27,32 +31,31 @@ class ConvertUtil
         8217 => ' '     // '
     ];
     
+    // Conversion d'une chaine UTF-8, utilisation des fonctions mb_*
     public static function convertString( $sInString )
     {
         $sOutString = "";
         $sInString = mb_strtolower($sInString);
     
+        // Parcourir les caractères de la chaine
         $nLen = mb_strlen($sInString);
         for ($i=0; $i < $nLen ; $i++) { 
             $sChar = mb_substr($sInString, $i, 1);
-    
+
             if (
                 ( $sChar === ' ' ) ||
-                ( ( mb_ord($sChar)>=mb_ord('a') ) && ( mb_ord($sChar)<=mb_ord('z') ) ) ||
-                ( ( mb_ord($sChar)>=mb_ord('0') ) && ( mb_ord($sChar)<=mb_ord('9') ) ) 
+                ( $sChar >= 'a' && $sChar <= 'z' ) ||
+                ( $sChar >= '0' && $sChar <= '9' ) 
             ) {
                 // Conserve le caractere tel quel
                 $sOutString .= $sChar;
             } else {
-    
                 $sConvert = self::convertChar($sChar);
                 if ($sConvert === false ) {
                     // Erreur pour caracteres inconnu
-                    echo "Erreur inconnu " . $sChar . mb_ord($sChar). "\n";
-
-//                    throw new Exception(__CLASS__.": convertString not known '$sChar' (".mb_ord($sChar).") ");
-
+                    throw new Exception(__CLASS__.": convertString unknown character '$sChar' (".mb_ord($sChar).") ");
                 } else {
+                    // Conversion du caractère
                     $sOutString .= $sConvert;
                 }
             }
@@ -65,8 +68,10 @@ class ConvertUtil
     {
         $sConvert = false;
     
-        if ( isset( self::CONVERT_TABLE[mb_ord($sChar)] ) ) {
-            $sConvert = self::CONVERT_TABLE[mb_ord($sChar)];
+        $nCodeChar = mb_ord($sChar);    // Code UTF-8 du caractere
+        // Si une conversion existe dans la table, retourner le caractere converti
+        if ( isset( self::CONVERT_TABLE[$nCodeChar] ) ) {
+            $sConvert = self::CONVERT_TABLE[$nCodeChar];
         }
     
         return($sConvert);
